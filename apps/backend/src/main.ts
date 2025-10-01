@@ -44,17 +44,16 @@ async function bootstrap() {
 
   loadSwagger(app);
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 5000; // fallback 5000 biar konsisten sama Postiz
 
-  try {
-    await app.listen(port);
+try {
+  await app.listen(port, '0.0.0.0'); // penting: bind ke 0.0.0.0 biar Render/ Docker bisa akses dari luar
 
-    checkConfiguration(); // Do this last, so that users will see obvious issues at the end of the startup log without having to scroll up.
+  checkConfiguration();
 
-    Logger.log(`🚀 Backend is running on: http://localhost:${port}`);
-  } catch (e) {
-    Logger.error(`Backend failed to start on port ${port}`, e);
-  }
+  Logger.log(`🚀 Backend is running on: http://0.0.0.0:${port}`);
+} catch (e) {
+  Logger.error(`Backend failed to start on port ${port}`, e);
 }
 
 function checkConfiguration() {
